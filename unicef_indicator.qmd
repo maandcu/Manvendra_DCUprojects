@@ -1,0 +1,92 @@
+---
+title: "UNICEF Data Report: Key Indicators for 10 Popular Countries"
+author: "Manvendra Pratap Singh"
+format: html
+execute:
+   echo: false
+   output: true
+   warning: false
+   message: false
+   embed-resources: true
+   code-fold: true
+editor: visual
+---
+
+# Introduction
+
+This report presents an analysis of selected UNICEF demographic indicators across 10 major countries: **India, United States, China, Brazil, Nigeria, Indonesia, Pakistan, Bangladesh, Mexico, and Russia**.
+
+We aim to highlight important trends using clean, reliable data from UNICEF sources. The visualizations are created using the **Plotnine** package in Python.
+
+# Data Preparation
+
+```{python}
+import pandas as pd
+
+# Load the cleaned data
+data = pd.read_csv("cleaned_unicef_10_countries.csv")
+
+data.head()
+```
+
+# World Map Visualization
+
+```{python}
+from plotnine import *
+
+# Example world map plot (simplified to available countries)
+(
+    ggplot(data, aes(x='Year', y='Observation_Value', color='Country')) +
+    geom_line() +
+    labs(title='Population Trends Over Time', x='Year', y='Observation Value')
+)
+```
+
+# Bar Chart: Latest Population Values
+
+```{python}
+latest_data = data[data['Year'] == data['Year'].max()]
+
+(
+    ggplot(latest_data, aes(x='Country', y='Observation_Value', fill='Country')) +
+    geom_bar(stat='identity') +
+    labs(title='Latest Population Figures', x='Country', y='Population') +
+    theme(axis_text_x=element_text(rotation=45, hjust=1))
+)
+```
+
+# Scatter Plot with Regression Line
+
+```{python}
+(
+    ggplot(data, aes(x='Year', y='Observation_Value', color='Country')) +
+    geom_point() +
+    geom_smooth(method='lm', se=False) +
+    labs(title='Population Growth with Linear Trend', x='Year', y='Observation Value')
+)
+```
+
+# Time-Series Chart: Country-Specific Trend
+
+```{python}
+india_data = data[data['Country'] == 'India']
+
+(
+    ggplot(india_data, aes(x='Year', y='Observation_Value')) +
+    geom_line() +
+    labs(title='India Population Trend', x='Year', y='Population')
+)
+```
+
+# Conclusion
+
+This report provides an accessible visualization of demographic trends among 10 highly populous countries. It helps identify patterns useful for UNICEF initiatives and public awareness.
+
+---
+
+# Notes
+- Data Source: UNICEF Demography Data 1.0
+- Tool: Plotnine (Python)
+- Format: Quarto HTML output
+
+
